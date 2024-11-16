@@ -1,36 +1,36 @@
-import React, { useState} from 'react'
+import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 
-function TodoForm(props) 
-{
-    const [todoInput, setTodoInput] = useState('');
+function TodoForm(props) {
+  const [todoInput, setTodoInput] = useState('');
 
-    function handleInput(event)
-    {
-      setTodoInput(event.target.value);
+  function handleInput(event) {
+    setTodoInput(event.target.value);
+  }
+
+  function handleSubmit(event) {
+    event.preventDefault();
+
+    if (todoInput.trim().length === 0) {
+      return;
     }
 
-    function handleSubmit(event) 
-    {
-        event.preventDefault();
+    props.addTodo(todoInput);
 
-        if (todoInput.trim().length === 0) {
-          return;
-        }
+    setTodoInput('');
+  }
 
-        props.addTodo(todoInput);
-
-        setTodoInput('');
-    }
-
-    return (
-        <form action="#" onSubmit={handleSubmit}>
-            <input
-            type="text" value={todoInput} onChange={handleInput}
-            className="todo-input"
-            placeholder="What do you need to do?"
-            />
-        </form>
-    )
+  return (
+    <form action='#' onSubmit={handleSubmit}>
+      <input
+        type='text'
+        value={todoInput}
+        onChange={handleInput}
+        className='todo-input'
+        placeholder='What do you need to do?'
+      />
+    </form>
+  );
 }
 
 export default TodoForm;
