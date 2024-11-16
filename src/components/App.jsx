@@ -1,35 +1,40 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef } from 'react';
 import NoTodos from './NoTodos';
 import TodoForm from './TodoForm';
 import TodoList from './TodoList';
+import useLocaleStorage from '../hooks/useLocalStorage';
 import '../reset.css';
 import '../App.css';
 
 function App() {
-  const [name, setName] = useState('');
-  const nameInputEl = useRef(null);
-  const [todos, setTodos] = useState([
-    {
-      id: 1,
-      title: 'Finish React Series',
-      isComplete: false,
-      isEditing: false,
-    },
-    {
-      id: 2,
-      title: 'Go Grocery',
-      isComplete: true,
-      isEditing: false,
-    },
-    {
-      id: 3,
-      title: 'Take over world',
-      isComplete: false,
-      isEditing: false,
-    },
-  ]);
+  // const [name, setName] = useState('');
+  const [name, setName] = useLocaleStorage('name', '');
 
-  const [idForTodo, setIdForTodo] = useState(4);
+  const nameInputEl = useRef(null);
+  const [todos, setTodos] = useLocaleStorage('todos', []);
+  // // const [todos, setTodos] = useState([
+  // //   {
+  // //     id: 1,
+  // //     title: 'Finish React Series',
+  // //     isComplete: false,
+  // //     isEditing: false,
+  // //   },
+  // //   {
+  // //     id: 2,
+  // //     title: 'Go Grocery',
+  // //     isComplete: true,
+  // //     isEditing: false,
+  // //   },
+  // //   {
+  // //     id: 3,
+  // //     title: 'Take over world',
+  // //     isComplete: false,
+  // //     isEditing: false,
+  // //   },
+  // ]);
+
+  // const [idForTodo, setIdForTodo] = useState(4);
+  const [idForTodo, setIdForTodo] = useLocaleStorage('idForTodo', 1);
 
   function addTodo(todo) {
     setTodos([
@@ -134,7 +139,13 @@ function App() {
 
   useEffect(() => {
     nameInputEl.current.focus();
+    // setName(JSON.parse(localStorage.getItem('name')) ?? '');
   }, []);
+
+  function handleNameInput(event) {
+    setName(event.target.value);
+    // localStorage.setItem('name', JSON.stringify(event.target.value));
+  }
 
   return (
     <div className='todo-app-container'>
@@ -148,7 +159,7 @@ function App() {
               className='todo-input'
               placeholder='what is your name'
               value={name}
-              onChange={(event) => setName(event.target.value)}
+              onChange={handleNameInput}
             />
           </form>
           {name && <p className='name-label'>Hello, {name}</p>}
