@@ -1,7 +1,7 @@
 import { useState } from 'react';
-import NoTodos from './NoTodos'
-import TodoForm from './TodoForm'
-import TodoList from './TodoList'
+import NoTodos from './NoTodos';
+import TodoForm from './TodoForm';
+import TodoList from './TodoList';
 import '../reset.css';
 import '../App.css';
 
@@ -24,59 +24,55 @@ function App() {
       title: 'Take over world',
       isComplete: false,
       isEditing: false,
-    }
+    },
   ]);
 
   const [idForTodo, setIdForTodo] = useState(4);
 
-  function addTodo(todo) 
-  {
+  function addTodo(todo) {
     setTodos([
-      ... todos, 
+      ...todos,
       {
         id: idForTodo,
         title: todo,
         isComplete: false,
       },
-    ])
+    ]);
 
-    setIdForTodo(prevIdForTodo => prevIdForTodo + 1);
+    setIdForTodo((prevIdForTodo) => prevIdForTodo + 1);
   }
 
   function deleteTodo(id) {
     console.log('deleting todo id ' + id);
-    setTodos([... todos.filter(todo => todo.id !== id)]);
+    setTodos([...todos.filter((todo) => todo.id !== id)]);
   }
 
-  function completeTodo(id)
-  {
-    const updatedTodos = todos.map(todo => {
+  function completeTodo(id) {
+    const updatedTodos = todos.map((todo) => {
       if (todo.id === id) {
-        todo.isComplete = !todo.isComplete
+        todo.isComplete = !todo.isComplete;
       }
 
       return todo;
-    })
+    });
 
     setTodos(updatedTodos);
   }
 
-  function markAsEditing(id)
-  {
-    const updatedTodos = todos.map(todo => {
+  function markAsEditing(id) {
+    const updatedTodos = todos.map((todo) => {
       if (todo.id === id) {
         todo.isEditing = true;
       }
 
       return todo;
-    })
+    });
 
     setTodos(updatedTodos);
   }
 
-  function updateTodo(event, id)
-  {
-    const updatedTodos = todos.map(todo => {
+  function updateTodo(event, id) {
+    const updatedTodos = todos.map((todo) => {
       if (todo.id === id) {
         if (event.target.value.trim().length === 0) {
           todo.isEditing = false;
@@ -87,14 +83,13 @@ function App() {
       }
 
       return todo;
-    })
+    });
 
     setTodos(updatedTodos);
   }
 
-  function cancelEdit(id)
-  {
-    const updateTodos = todos.map(todo => {
+  function cancelEdit(id) {
+    const updateTodos = todos.map((todo) => {
       if (todo.id === id) {
         todo.isEditing = false;
       }
@@ -105,13 +100,31 @@ function App() {
     setTodos(updateTodos);
   }
 
-  return (
-    <div className="todo-app-container">
-      <div className="todo-app">
-        <h2>Todo App</h2>
-        <TodoForm addTodo={addTodo}/>
+  function remaining() {
+    return todos.filter((todo) => !todo.isComplete).length;
+  }
 
-        { todos.length > 0 ? (
+  function clearCompleted(param) {
+    setTodos([...todos].filter((todo) => !todo.isComplete));
+  }
+
+  function completeAllTodos() {
+    const updatedTodos = todos.map((todo) => {
+      todo.isComplete = true;
+
+      return todo;
+    });
+
+    setTodos(updatedTodos);
+  }
+
+  return (
+    <div className='todo-app-container'>
+      <div className='todo-app'>
+        <h2>Todo App</h2>
+        <TodoForm addTodo={addTodo} />
+
+        {todos.length > 0 ? (
           <TodoList
             todos={todos}
             completeTodo={completeTodo}
@@ -119,11 +132,13 @@ function App() {
             updateTodo={updateTodo}
             cancelEdit={cancelEdit}
             deleteTodo={deleteTodo}
+            remaining={remaining}
+            clearCompleted={clearCompleted}
+            completeAllTodos={completeAllTodos}
           />
         ) : (
           <NoTodos />
         )}
-
       </div>
     </div>
   );
