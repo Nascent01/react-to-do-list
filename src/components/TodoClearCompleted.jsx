@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 function TodoClearCompleted(props) {
   return (
-    <button onClick={props.clearCompleted()} className='button'>
+    <button onClick={props.clearCompleted} className='button'>
       Clear completed
     </button>
   );
